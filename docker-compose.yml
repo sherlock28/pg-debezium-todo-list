@@ -1,0 +1,63 @@
+version: '3.9'
+services:
+  zookeeper:
+    container_name: zookeeper
+    hostname: zookeeper
+    image: docker.io/bitnami/zookeeper:3.7
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      
+  kafka:
+    container_name: kafka
+    hostname: kafka
+    image: docker.io/bitnami/kafka:2
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    env_file:
+      - ./kafka/kafka.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper
+
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:11
+    env_file:
+      - ./postgres/postgres.env
+    ports:
+      - "5432:5432"
+    command: [ "postgres", "-c", "wal_level=logical", "-c", "max_wal_senders=1" , "-c", "max_replication_slots=1" ]
+    restart: unless-stopped
+    volumes:
+      - pgdb_data:/var/lib/postgresql/data
+
+  debezium:
+    container_name: debezium
+    hostname: debezium
+    image: debezium/connect
+    env_file:
+      - ./debezium/debezium.env
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+    
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    ports:
+      - 8080:80
+    env_file:
+      - ./pgadmin/pgadmin.env
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      
+volumes:
+  pgdb_data:
+  pgadmin_data:

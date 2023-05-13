@@ -1,0 +1,16 @@
+{
+    "name": "todo-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "tasks.max": "1",
+        "database.hostname": "postgres",
+        "database.port": "5432",
+        "database.user": "postgres",
+        "database.password": "postgres",
+        "database.dbname": "tododb",
+        "database.server.name": "dbserver1",
+        "database.history.kafka.bootstrap.servers": "redpanda-0:9092",
+        "plugin.name": "pgoutput",
+        "topic.prefix": "todo"
+    }
+}

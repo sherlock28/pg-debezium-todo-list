@@ -9,13 +9,17 @@ dotnet tool install --global dotnet-ef
 ### Run migrations
 
 ```
+cd API.Gateway
 dotnet ef database update InitMigration
+cd ..
 ```
+
+## Using Kafka (original)
 
 ### Configure Debezium
 
 ```
-curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/todo-connector.json
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/chat-connector.json
 ```
 
 ### Create topic
@@ -51,3 +55,21 @@ curl -i -H "Accept:application/json" localhost:8083/connectors/
 ```
 kafka-topics.sh --list --zookeeper zookeeper:2181
 ```
+
+## Using Redpanda
+
+### Start docker compose apps
+
+```shell
+docker compose -f .\docker-compose.redpanda.yml up -d
+```
+
+### Configure Debezium
+
+```shell
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/chat-connector.redpanda.json
+```
+
+### Check topics
+
+* http://localhost:8088/

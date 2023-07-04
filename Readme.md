@@ -19,7 +19,7 @@ cd ..
 ### Configure Debezium
 
 ```
-curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/chat-connector.json
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/todo-connector.json
 ```
 
 ### Create topic
@@ -56,6 +56,8 @@ curl -i -H "Accept:application/json" localhost:8083/connectors/
 kafka-topics.sh --list --zookeeper zookeeper:2181
 ```
 
+---
+
 ## Using Redpanda
 
 ### Start docker compose apps
@@ -67,7 +69,7 @@ docker compose -f .\docker-compose.redpanda.yml up -d
 ### Configure Debezium
 
 ```shell
-curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/chat-connector.redpanda.json
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @debezium/connector-config/todo-connector.redpanda.json
 ```
 
 ### Check topics
